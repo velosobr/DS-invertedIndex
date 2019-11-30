@@ -8,15 +8,21 @@ import java.util.List;
 
 public class DataProducts {
     private Product[] products;
+    //Criação dos 3 diretórios solicitados
     private DirInvertedIndex dirByBrand;
     private DirInvertedIndex dirByType;
+    private DirInvertedIndex dirByFlavor;
+
     private int index = 0;
 
 
-    public DataProducts(Product[] products, DirInvertedIndex dirByBrand, DirInvertedIndex dirByType) {
+    public DataProducts(Product[] products, DirInvertedIndex dirByBrand, DirInvertedIndex dirByType, DirInvertedIndex dirByFlavor) {
         this.products = products;
         this.dirByBrand = dirByBrand;
         this.dirByType = dirByType;
+        this.dirByFlavor = dirByFlavor;
+
+
     }
 
     public Product[] getProducts() {
@@ -48,7 +54,7 @@ public class DataProducts {
     }
 
     private void incrementIndex() throws IndexOutOfBoundsException {
-        if ((index++) > products.length)
+        if ((index + 1) > products.length)
             throw new IndexOutOfBoundsException();
 
         index++;
@@ -58,11 +64,13 @@ public class DataProducts {
         products[getIndex()] = product;
         dirByBrand.insert(product.getBrand(), getIndex());
         dirByType.insert(product.getType(), getIndex());
+        dirByFlavor.insert(product.getFlavor(), getIndex());
         incrementIndex();
     }
 
     public List<Product> getProductsByBrand(String brand) {
         List<Product> productsByBrand = new ArrayList<>();
+
         List<Integer> listByBrand = dirByBrand.getList(brand);
 
         for (int i : listByBrand)
@@ -70,6 +78,10 @@ public class DataProducts {
 
         return productsByBrand;
 
+    }
+
+    public List<Product> getProductsByBrandandByType(String Brand, String Type) {
+        return Null;
     }
 
     public List<Product> getProductsByType(String type) {
@@ -80,5 +92,15 @@ public class DataProducts {
             productsByType.add(products[index]);
         }
         return productsByType;
+    }
+
+    public List<Product> getProductsByFlavor(String flavor) {
+        List<Product> productsByFlavor = new ArrayList<>();
+        List<Integer> listByFlavor = dirByFlavor.getList(flavor);
+
+        for (int index : listByFlavor) {
+            productsByFlavor.add(products[index]);
+        }
+        return productsByFlavor;
     }
 }

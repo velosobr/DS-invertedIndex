@@ -6,14 +6,16 @@ public class Product {
     private String name;
     private String brand;
     private String type;
-    private String value; //Quantidade por produto
+    private String flavor;
+    private int amount; //amount per product in ml's
 
 
-    public Product(String name, String brand, String type, String value) {
+    public Product(String name, String brand, String type, String flavor, int amount) {
         this.name = name;
         this.brand = brand;
         this.type = type;
-        this.value = value;
+        this.flavor = flavor;
+        this.amount = amount;
     }
 
     public Product() {
@@ -44,12 +46,20 @@ public class Product {
         this.type = type;
     }
 
-    public String getValue() {
-        return value;
+    public String getFlavor() {
+        return flavor;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setFlavor(String flavor) {
+        this.flavor = flavor;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setamount(int amount) {
+        this.amount = amount;
     }
 
     @Override
@@ -58,7 +68,7 @@ public class Product {
                 "name='" + name + '\'' +
                 ", Brand='" + brand + '\'' +
                 ", type='" + type + '\'' +
-                ", value=" + value +
+                ", amount=" + amount +
                 '}';
     }
 }
