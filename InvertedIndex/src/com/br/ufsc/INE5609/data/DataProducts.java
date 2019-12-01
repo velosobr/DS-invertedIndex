@@ -3,8 +3,7 @@ package com.br.ufsc.INE5609.data;
 import com.br.ufsc.INE5609.indexation.DirInvertedIndex;
 import com.br.ufsc.INE5609.model.Product;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class DataProducts {
     private Product[] products;
@@ -29,24 +28,32 @@ public class DataProducts {
         return products;
     }
 
-    public void setProducts(Product[] products) {
+    private void setProducts(Product[] products) {
         this.products = products;
     }
 
-    public DirInvertedIndex getDirByBrand() {
+    private DirInvertedIndex getDirByBrand() {
         return dirByBrand;
     }
 
-    public void setDirByBrand(DirInvertedIndex dirByBrand) {
+    private void setDirByBrand(DirInvertedIndex dirByBrand) {
         this.dirByBrand = dirByBrand;
     }
 
-    public DirInvertedIndex getDirByType() {
+    private DirInvertedIndex getDirByType() {
         return dirByType;
     }
 
-    public void setDirByType(DirInvertedIndex dirByType) {
+    private void setDirByType(DirInvertedIndex dirByType) {
         this.dirByType = dirByType;
+    }
+
+    private DirInvertedIndex getDirByFlavor() {
+        return dirByFlavor;
+    }
+
+    private void setDirByFlavor(DirInvertedIndex dirByFlavor) {
+        this.dirByFlavor = dirByFlavor;
     }
 
     private int getIndex() {
@@ -68,9 +75,54 @@ public class DataProducts {
         incrementIndex();
     }
 
-    public List<Product> getProductsByBrand(String brand) {
-        List<Product> productsByBrand = new ArrayList<>();
 
+    private List<Product> productsByBrandAndByType(String Brand, String Type) {
+        List<Product> productsByBrandAndByType = new ArrayList<>();
+        List<Product> productsByBrand = productsByBrand(Brand);
+        List<Product> productsByType = productsByType(Type);
+
+        for (Product i : productsByBrand) {
+            for (Product j : productsByType) {
+                if (!i.getType().equalsIgnoreCase(j.getType())) {
+                    break;
+                }
+                /// estou na lista de marcas, verificando se na de tipos tem algum produto da marca (i) que eu quero
+                if (i.getBrand().equalsIgnoreCase(j.getBrand())
+                        && i.getName().equalsIgnoreCase(j.getName())) {
+                    productsByBrandAndByType.add(j);
+                    break;
+                }
+            }
+        }
+
+        return productsByBrandAndByType;
+    }
+
+
+    private List<Product> productsByFlavorAndByType(String Flavor, String Type) {
+        List<Product> productsByFlavorAndByType = new ArrayList<>();
+        List<Product> productsByFlavor = productsByFlavor(Flavor);
+        List<Product> productsByType = productsByType(Type);
+
+        for (Product i : productsByFlavor) {
+            for (Product j : productsByType) {
+                if (!i.getType().equalsIgnoreCase(j.getType())) {
+                    break;
+                }
+                /// estou na lista de marcas, verificando se na de tipos tem algum produto da marca (i) que eu quero
+                if (i.getFlavor().equalsIgnoreCase(j.getFlavor())
+                        && i.getName().equalsIgnoreCase(j.getName())) {
+                    productsByFlavorAndByType.add(j);
+                    break;
+                }
+            }
+        }
+
+        return productsByFlavorAndByType;
+    }
+
+    private List<Product> productsByBrand(String brand) {
+        List<Product> productsByBrand = new ArrayList<>();
         List<Integer> listByBrand = dirByBrand.getList(brand);
 
         for (int i : listByBrand)
@@ -80,11 +132,7 @@ public class DataProducts {
 
     }
 
-    public List<Product> getProductsByBrandandByType(String Brand, String Type) {
-        return Null;
-    }
-
-    public List<Product> getProductsByType(String type) {
+    private List<Product> productsByType(String type) {
         List<Product> productsByType = new ArrayList<>();
         List<Integer> listByType = dirByType.getList(type);
 
@@ -94,7 +142,7 @@ public class DataProducts {
         return productsByType;
     }
 
-    public List<Product> getProductsByFlavor(String flavor) {
+    private List<Product> productsByFlavor(String flavor) {
         List<Product> productsByFlavor = new ArrayList<>();
         List<Integer> listByFlavor = dirByFlavor.getList(flavor);
 
@@ -103,4 +151,98 @@ public class DataProducts {
         }
         return productsByFlavor;
     }
+
+    //Stringbuilders de retorno das buscas duplas
+
+    public StringBuilder getProductsByFlavor(String flavor) {
+
+        return (stringConstructor(productsByFlavor(flavor)));
+
+    }
+
+    public StringBuilder getProductsByType(String type) {
+
+        return (stringConstructor(productsByType(type)));
+
+    }
+
+    public StringBuilder getProductsByBrand(String brand) {
+
+        return (stringConstructor(productsByBrand(brand)));
+
+    }
+
+
+    public StringBuilder getProductsByBrandAndByType(String brand, String type) {
+
+        return stringConstructor(productsByBrandAndByType(brand, type));
+
+    }
+
+    public StringBuilder getProductsByFlavorAndByType(String flavor, String type) {
+
+        return stringConstructor(productsByFlavorAndByType(flavor, type));
+
+    }
+
+    public StringBuilder getFlavors() {
+
+        HashMap flavors = getDirByFlavor().getDir();
+
+        StringBuilder returnValue = new StringBuilder("{\n");
+        for (Object key : flavors.keySet()) {
+            returnValue.append("- " + key);
+            returnValue.append(" \n");
+        }
+        returnValue.append("}");
+
+        return returnValue;
+
+    }
+
+    public StringBuilder getTypes() {
+
+        HashMap types = getDirByType().getDir();
+
+        StringBuilder returnValue = new StringBuilder("{\n");
+        for (Object key : types.keySet()) {
+            returnValue.append("- " + key);
+            returnValue.append(" \n");
+        }
+        returnValue.append("}");
+
+        return returnValue;
+
+    }
+
+    public StringBuilder getBrands() {
+
+        HashMap brands = getDirByBrand().getDir();
+
+        StringBuilder returnValue = new StringBuilder("{\n");
+        for (Object key : brands.keySet()) {
+            returnValue.append("- " + key);
+            returnValue.append(" \n");
+        }
+        returnValue.append("}");
+
+        return returnValue;
+
+    }
+
+
+    private StringBuilder stringConstructor(List<Product> listOfProducts) {
+        StringBuilder returnValue = new StringBuilder("{\n");
+
+        for (int i = 0; i < listOfProducts.size(); i++) {
+            returnValue.append(listOfProducts.get(i));
+            returnValue.append("\n");
+        }
+        returnValue.append("}");
+
+        return returnValue;
+    }
+
+
 }
+

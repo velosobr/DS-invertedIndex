@@ -28,4 +28,8 @@ public class DirInvertedIndex {
     public List<Integer> getList(String Key) {
         return dir.get(Key);
     }
+
+    public HashMap<String, List<Integer>> getDir() {
+        return dir;
+    }
 }
