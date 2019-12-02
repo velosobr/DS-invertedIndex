@@ -21,6 +21,11 @@ public class DirInvertedIndex {
         }
     }
 
+    public void remove(String key, int index) {
+        dir.get(key).remove(index);
+
+    }
+
     /**
      * @param Key - parametro responsavel por filtrar qual lista retornar
      * @return - retorna uma lista baseada na chave

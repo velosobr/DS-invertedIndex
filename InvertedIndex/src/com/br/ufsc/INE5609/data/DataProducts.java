@@ -75,6 +75,30 @@ public class DataProducts {
         incrementIndex();
     }
 
+    public void removeProduct(String deletedProduct) {
+        int indexOfProduct = getIndexbyName(deletedProduct);
+
+
+        dirByFlavor.remove(products[indexOfProduct].getFlavor(), indexOfProduct);
+        dirByType.remove(products[indexOfProduct].getType(), indexOfProduct);
+        dirByBrand.remove(products[indexOfProduct].getBrand(), indexOfProduct);
+        products[indexOfProduct] = null;
+    }
+
+    private int getIndexbyName(String deletedProduct) {
+        int index = -1;
+        for (int i = 0; i < products.length; i++) {
+            if (products[i] != null) {
+                if (products[i].getName().equalsIgnoreCase(deletedProduct)) {
+                    return i;
+                }
+
+            }
+
+        }
+        return index;
+    }
+
 
     private List<Product> productsByBrandAndByType(String Brand, String Type) {
         List<Product> productsByBrandAndByType = new ArrayList<>();
@@ -172,6 +196,20 @@ public class DataProducts {
 
     }
 
+    public StringBuilder getListOfProducts() {
+        StringBuilder ListOfProducts = new StringBuilder("{");
+
+        for (Product p : products) {
+            if (p != null) {
+                ListOfProducts.append(p);
+                ListOfProducts.append("\n");
+            }
+        }
+        ListOfProducts.append("}");
+
+        return ListOfProducts;
+
+    }
 
     public StringBuilder getProductsByBrandAndByType(String brand, String type) {
 
