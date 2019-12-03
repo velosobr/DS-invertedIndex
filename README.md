@@ -1,4 +1,4 @@
-# DS - inverted Index - Listas Invertida
+# DS - inverted Index - Listas Invertidas
 Thats is a homework of my classes of Data Structures at UFSC / INE5609
 
 Uma lista invertida nos traz grande vantagem na questão do aumento da eficiência de busca (necessário para longos arquivos de texto).Este tipo de estrutura é um dos mais eficientes para a indexação de documentos comparados a outros 
